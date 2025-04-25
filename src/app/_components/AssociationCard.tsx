@@ -1,6 +1,7 @@
 "use client";
 
-import Image from "next/image"; 
+import Image from "next/image";
+import Link from "next/link";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "~/server/api/root";
 
@@ -13,8 +14,11 @@ type Props = {
 
 export const AssociationCard = ({ association }: Props) => {
   return (
-    <div className="bg-white rounded-lg shadow-md border p-6 flex flex-col justify-between h-full">
-      {association.logoUrl && (
+    <Link
+      href={`/associations/detailedAssociation/${association.id}`}
+      className="bg-white rounded-lg shadow-md border p-6 flex flex-col justify-between h-full hover:shadow-lg transition-shadow"
+    >
+      {association.logoUrl ? (
         <Image
           src={association.logoUrl}
           alt={association.name}
@@ -22,6 +26,10 @@ export const AssociationCard = ({ association }: Props) => {
           height={200}
           className="rounded-md object-cover w-full h-40 mb-4"
         />
+      ) : (
+        <div className="w-full h-40 bg-gray-200 rounded-md mb-4 flex items-center justify-center text-gray-500 text-sm">
+          Aucun logo
+        </div>
       )}
       <div className="flex-grow">
         <h3 className="text-xl font-semibold text-black mb-2">
@@ -32,6 +40,6 @@ export const AssociationCard = ({ association }: Props) => {
           {association.category}
         </span>
       </div>
-    </div>
+    </Link>
   );
 };
