@@ -22,10 +22,9 @@ const THEME_EMOJIS: Record<string, string> = {
   Inclusion: "🌍",
 };
 
-export default async function ThemePage({ params }: Props) {
+export default async function ThemePage({ params }: { params: { themes: string } }) {
   const currentRaw = decodeURIComponent(params.themes);
 
-  // Trouve la vraie catégorie avec majuscule
   const currentCategory = Object.keys(THEME_EMOJIS).find(
     (key) => key.toLowerCase() === currentRaw.toLowerCase()
   );
@@ -33,12 +32,8 @@ export default async function ThemePage({ params }: Props) {
   if (!currentCategory) notFound();
 
   const filteredAssociations = await db.association.findMany({
-    where: {
-      category: currentCategory,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
+    where: { category: currentCategory },
+    orderBy: { createdAt: "desc" },
   });
 
   const emoji = THEME_EMOJIS[currentCategory];
@@ -67,3 +62,4 @@ export default async function ThemePage({ params }: Props) {
     </main>
   );
 }
+
