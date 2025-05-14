@@ -116,11 +116,11 @@ export const AddProductForm = ({ isAdmin = false }: Props) => {
           className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="">-- Choisir une association --</option>
-          {associations.map((a) => (
-            <option key={a.id} value={a.id}>
-              {a.name}
-            </option>
-          ))}
+          {associations.map((a: { id: string; name: string }) => (
+  <option key={a.id} value={a.id}>
+    {a.name}
+  </option>
+))}
         </select>
       </div>
 

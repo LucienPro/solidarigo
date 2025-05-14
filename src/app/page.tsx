@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { HydrateClient } from "~/trpc/server";
 import { HeroSection } from "./_components/HeroSection";
 import { AssociationOfTheDay } from "./_components/AssociationOfTheDay";

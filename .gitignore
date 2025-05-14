@@ -47,7 +47,7 @@ yarn-error.log*
 
 # Node
 node_modules
-pnpm-lock.yaml
+#pnpm-lock.yaml
 npm-debug.log*
 
 # Next.js

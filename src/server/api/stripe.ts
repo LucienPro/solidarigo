@@ -14,8 +14,8 @@ export const getStripeProducts = async () => {
       id: p.id,
       name: p.name,
       description: p.description,
-      image: p.images?.[0] || null,
-      price: price.unit_amount, // en centimes
+      image: p.images?.[0] ?? null,
+      price: price.unit_amount,
       currency: price.currency,
       priceId: price.id,
     };
