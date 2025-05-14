@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import { useCart } from "@/context/CartContext";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import Image from "next/image";
 
 export const StripeProductGrid = () => {
   const { data: products, isLoading } = api.stripe.getProducts.useQuery();
@@ -18,11 +19,13 @@ export const StripeProductGrid = () => {
         ?.filter((product): product is NonNullable<typeof product> => product !== null)
         .map((product) => (
           <div key={product.id} className="border p-4 rounded bg-white shadow-sm">
-            <img
-              src={product.image ?? "/placeholder.png"}
-              alt={product.name}
-              className="w-full h-48 object-cover mb-2 rounded"
-            />
+            <Image
+  src={product.image ?? "/placeholder.png"}
+  alt={product.name}
+  width={300}
+  height={200}
+  className="w-full h-auto object-contain rounded-md mb-4"
+/>
             <h3 className="text-lg font-semibold text-black">{product.name}</h3>
             <p className="text-sm text-gray-700">{product.description}</p>
             <p className="mt-2 font-bold text-green-600">{(product.price / 100).toFixed(2)} €</p>

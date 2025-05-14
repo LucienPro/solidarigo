@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import { useCart } from "@/context/CartContext";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import Image from "next/image";
 
 // 👇 Typage local du produit attendu (optionnel si tu veux plus fort encore)
 type ProductType = {
@@ -33,11 +34,13 @@ export const ProductList = () => {
           className="bg-white border border-gray-200 rounded-lg shadow-md p-4 flex flex-col"
         >
           {product.image && (
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-48 object-contain rounded-md mb-4"
-            />
+            <Image
+  src={product.image ?? "/placeholder.png"}
+  alt={product.name}
+  width={300}
+  height={200}
+  className="w-full h-auto object-contain rounded-md mb-4"
+/>
           )}
 
           <h3 className="text-lg font-semibold text-black">{product.name}</h3>

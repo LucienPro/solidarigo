@@ -1,11 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server"; 
+import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {});
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const sessionId = url.pathname.split("/").pop(); // Récupère l'ID depuis l'URL
+  const sessionId = url.pathname.split("/").pop(); 
 
   if (!sessionId) {
     return NextResponse.json({ error: "Session ID manquant" }, { status: 400 });

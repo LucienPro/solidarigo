@@ -4,6 +4,13 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import confetti from "canvas-confetti";
+import Link from "next/link";
+
+type SessionInfo = {
+  email?: string;
+  amount_total?: number;
+  customer_name?: string;
+};
 
 export default function MerciPage() {
   const { clearCart } = useCart();
@@ -11,11 +18,7 @@ export default function MerciPage() {
   const sessionId = searchParams.get("session_id");
 
   const [loading, setLoading] = useState(true);
-  const [sessionData, setSessionData] = useState<{
-    email?: string;
-    amount_total?: number;
-    customer_name?: string;
-  } | null>(null);
+  const [sessionData, setSessionData] = useState<SessionInfo | null>(null);
 
   useEffect(() => {
     if (!sessionId) {
@@ -26,17 +29,15 @@ export default function MerciPage() {
     const fetchSession = async () => {
       try {
         const res = await fetch(`/api/stripe/session/${sessionId}`);
-        const data = await res.json();
+        const data: SessionInfo = await res.json();
         setSessionData(data);
 
-        // ✅ Lancer les confettis une seule fois
         confetti({
           particleCount: 150,
           spread: 70,
           origin: { y: 0.6 },
         });
 
-        // ✅ Vider le panier une seule fois
         if (typeof window !== "undefined") {
           clearCart();
         }
@@ -47,8 +48,8 @@ export default function MerciPage() {
       }
     };
 
-    fetchSession();
-  }, [sessionId]); // ❌ clearCart retiré ici
+    void fetchSession(); // ✅ éviter no-floating-promises
+  }, [sessionId, clearCart]); // ✅ ajouter clearCart dans les dépendances
 
   if (loading) {
     return <p className="text-center py-12 text-black">Chargement...</p>;
@@ -70,15 +71,17 @@ export default function MerciPage() {
       )}
 
       {sessionData?.email && (
-        <p className="text-gray-600 text-sm">Un reçu a été envoyé à {sessionData.email}</p>
+        <p className="text-gray-600 text-sm">
+          Un reçu a été envoyé à {sessionData.email}
+        </p>
       )}
 
-      <a
+      <Link
         href="/"
         className="mt-6 inline-block px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
       >
         Retour à l’accueil
-      </a>
+      </Link>
     </div>
   );
 }

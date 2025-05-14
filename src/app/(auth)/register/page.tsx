@@ -13,29 +13,29 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     try {
       const res = await authClient.signUp.email({
         email,
         password,
-        name: `${firstName} ${lastName}`
-
+        name: `${firstName} ${lastName}`,
       });
-    
+
       if (res.error) {
         console.error("Erreur signup:", res.error.message);
         throw new Error(res.error.message);
       }
-    
+
       alert("📬 Un email de vérification t’a été envoyé.");
-      router.push('/login');
-    } catch (err: any) {
+      void router.push('/login');
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Erreur inconnue';
       console.error("Erreur côté client :", err);
-      setError(err.message || 'Erreur inconnue');
+      setError(message ?? 'Erreur inconnue');
     }
-    
   };
 
   return (
@@ -53,22 +53,21 @@ export default function RegisterPage() {
             required
           />
           <input
-  type="text"
-  placeholder="Prénom"
-  className="p-3 rounded-xl border"
-  value={firstName}
-  onChange={(e) => setFirstName(e.target.value)}
-  required
-/>
-<input
-  type="text"
-  placeholder="Nom"
-  className="p-3 rounded-xl border"
-  value={lastName}
-  onChange={(e) => setLastName(e.target.value)}
-  required
-/>
-
+            type="text"
+            placeholder="Prénom"
+            className="p-3 rounded-xl border"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Nom"
+            className="p-3 rounded-xl border"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
           <input
             type="password"
             placeholder="Mot de passe"

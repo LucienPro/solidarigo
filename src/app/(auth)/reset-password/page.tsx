@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
 
 export default function ResetPasswordPage() {
@@ -37,10 +37,14 @@ export default function ResetPasswordPage() {
       if (result.error) throw new Error(result.error.message);
 
       setSuccess(true);
-      setTimeout(() => router.push('/login'), 3000);
-    } catch (err: any) {
+      setTimeout(() => {
+        void router.push('/login');
+      }, 3000);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Une erreur est survenue.";
       console.error(err);
-      setError(err?.message || "Une erreur est survenue.");
+      setError(errorMessage);
     }
   };
 
@@ -52,25 +56,29 @@ export default function ResetPasswordPage() {
         </h1>
 
         {success ? (
-  <div className="flex flex-col items-center justify-center gap-4 py-6">
-    <div className="animate-ping-once">
-      <svg
-        className="w-16 h-16 text-green-600"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-      </svg>
-    </div>
-    <p className="text-green-700 font-semibold text-center">
-      Ton mot de passe a bien été mis à jour 🎉
-      <br />
-      Redirection vers la connexion...
-    </p>
-  </div>
-) : (
+          <div className="flex flex-col items-center justify-center gap-4 py-6">
+            <div className="animate-ping-once">
+              <svg
+                className="w-16 h-16 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <p className="text-green-700 font-semibold text-center">
+              Ton mot de passe a bien été mis à jour 🎉
+              <br />
+              Redirection vers la connexion...
+            </p>
+          </div>
+        ) : (
           <form onSubmit={handleReset} className="flex flex-col gap-4">
             <input
               type="password"

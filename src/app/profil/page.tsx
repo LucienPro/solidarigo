@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { api } from "@/utils/api";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image"; // ✅ Import du composant Image
 
 export default function ProfilPage() {
   const { data: session, isPending } = authClient.useSession();
@@ -31,7 +32,6 @@ export default function ProfilPage() {
 
   const { name, email, image } = session.user;
 
-  // 🔁 Tri des commandes par date décroissante
   const sortedOrders = [...orders].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
@@ -43,10 +43,12 @@ export default function ProfilPage() {
       {/* 🧾 Infos utilisateur */}
       <div className="bg-white shadow rounded-lg p-6 flex items-center gap-6">
         {image && (
-          <img
+          <Image
             src={image}
             alt={name ?? "Utilisateur"}
-            className="w-20 h-20 rounded-full object-cover border"
+            width={80}
+            height={80}
+            className="rounded-full object-cover border"
           />
         )}
         <div>

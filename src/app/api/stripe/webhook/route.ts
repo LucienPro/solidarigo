@@ -30,17 +30,26 @@ export async function POST(req: Request) {
     return new Response("Signature invalide", { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed") {
-    const session = await stripe.checkout.sessions.retrieve(event.data.object.id, {
-      expand: ["line_items.data.price"],
-    });
+if (event.type === "checkout.session.completed") {
+  const session = await stripe.checkout.sessions.retrieve(event.data.object.id, {
+    expand: ["line_items.data.price"],
+  });
 
-    const userId = session.metadata?.userId;
-    const lineItems = (session as any).line_items?.data ?? [];
+  const userId = session.metadata?.userId;
 
-    console.log("👉 Session checkout ID :", session.id);
-    console.log("👉 User ID :", userId);
-    console.log("👉 Items :", lineItems);
+  const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
+    expand: ["line_items", "line_items.data.price"],
+  }) as Stripe.Checkout.Session & {
+    line_items: {
+      data: Stripe.LineItem[];
+    };
+  };
+
+  const lineItems = fullSession.line_items.data ?? [];
+
+  console.log("👉 Session checkout ID :", fullSession.id);
+  console.log("👉 User ID :", userId);
+  console.log("👉 Items :", lineItems);
 
     try {
       const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
