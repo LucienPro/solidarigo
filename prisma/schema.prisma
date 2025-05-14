@@ -22,23 +22,22 @@ model Post {
   @@index([name])
 }
 
-
 model Product {
   id              String      @id @default(uuid())
-  name            String
+  name            String      @unique
   description     String
   price           Int
   imageUrl        String?
   associationId   String
   association     Association @relation(fields: [associationId], references: [id])
   createdAt       DateTime    @default(now())
-  stripeProductId String?
+  stripeProductId String? @unique
   stripePriceId   String?
 }
 
 model Association {
   id             String   @id @default(uuid())
-  name           String
+  name           String   @unique
   description    String
   category       String
   logoUrl        String?
@@ -48,13 +47,15 @@ model Association {
   activities     String?
   supportReasons String?
   impact         String?
+  currentAmount Int     @default(0)
+  goalAmount    Int     @default(1000)
 
   products Product[]
 }
 
 model Testimonial {
   id        String   @id @default(uuid())
-  author    String
+  author    String   @unique
   message   String
   createdAt DateTime @default(now())
 }
@@ -78,8 +79,10 @@ model Verification {
 
 model User {
   id            String    @id
+  email         String    @unique
   name          String
-  email         String
+  firstName     String?
+  lastName      String?
   emailVerified Boolean
   image         String?
   posts         Post[]    @relation("UserPosts")
@@ -87,8 +90,8 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  orders        Order[]
 
-  @@unique([email])
   @@map("user")
 }
 
@@ -124,4 +127,25 @@ model Account {
   updatedAt             DateTime
 
   @@map("account")
+}
+
+model Order {
+  id               String      @id @default(uuid())
+  userId           String
+  user             User        @relation(fields: [userId], references: [id])
+  totalAmount      Int
+  status           String      @default("paid")
+  stripeCheckoutId String
+  createdAt        DateTime    @default(now())
+  items            OrderItem[]
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId   String
+  order     Order  @relation(fields: [orderId], references: [id])
+  priceId   String // Stripe priceId
+  name      String
+  quantity  Int
+  unitPrice Int
 }

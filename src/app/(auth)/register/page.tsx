@@ -7,6 +7,9 @@ import { useRouter } from 'next/navigation';
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -17,15 +20,22 @@ export default function RegisterPage() {
       const res = await authClient.signUp.email({
         email,
         password,
-        name: email.split('@')[0] || "user"
-      });
-      if (res.error) throw new Error(res.error.message);
+        name: `${firstName} ${lastName}`
 
+      });
+    
+      if (res.error) {
+        console.error("Erreur signup:", res.error.message);
+        throw new Error(res.error.message);
+      }
+    
       alert("📬 Un email de vérification t’a été envoyé.");
       router.push('/login');
     } catch (err: any) {
+      console.error("Erreur côté client :", err);
       setError(err.message || 'Erreur inconnue');
     }
+    
   };
 
   return (
@@ -42,6 +52,23 @@ export default function RegisterPage() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          <input
+  type="text"
+  placeholder="Prénom"
+  className="p-3 rounded-xl border"
+  value={firstName}
+  onChange={(e) => setFirstName(e.target.value)}
+  required
+/>
+<input
+  type="text"
+  placeholder="Nom"
+  className="p-3 rounded-xl border"
+  value={lastName}
+  onChange={(e) => setLastName(e.target.value)}
+  required
+/>
+
           <input
             type="password"
             placeholder="Mot de passe"

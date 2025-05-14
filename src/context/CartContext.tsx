@@ -16,8 +16,11 @@ type CartContextType = {
   addToCart: (item: Omit<CartItem, "quantity">) => void;
   removeFromCart: (priceId: string) => void;
   clearCart: () => void;
+  increaseQuantity: (priceId: string) => void;
+  decreaseQuantity: (priceId: string) => void;
   total: number;
 };
+
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -53,12 +56,46 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => {
     setCart([]);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("cart");
+    }
   };
+
+  const increaseQuantity = (priceId: string) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.priceId === priceId ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+  
+  const decreaseQuantity = (priceId: string) => {
+    setCart((prev) =>
+      prev
+        .map((item) =>
+          item.priceId === priceId
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
+  };
+  
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, total }}>
+    <CartContext.Provider
+  value={{
+    cart,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    increaseQuantity,
+    decreaseQuantity,
+    total,
+  }}
+>
       {children}
     </CartContext.Provider>
   );

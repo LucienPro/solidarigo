@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "~/server/api/root";
+import { ProgressBar } from "./ProgressBar";
+
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type Association = RouterOutputs["association"]["getAll"][number];
@@ -31,15 +33,26 @@ export const AssociationCard = ({ association }: Props) => {
           Aucun logo
         </div>
       )}
-      <div className="flex-grow">
+
+      <div className="flex-grow mb-4">
         <h3 className="text-xl font-semibold text-black mb-2">
           {association.name}
         </h3>
         <p className="text-gray-700 mb-2">{association.description}</p>
         <span className="inline-block bg-green-100 text-green-700 text-sm px-3 py-1 rounded-full">
-        {association.category}
+          {association.category}
         </span>
       </div>
+
+      {/* ✅ Barre de progression */}
+      {typeof association.currentAmount === "number" &&
+        typeof association.goalAmount === "number" && (
+          <ProgressBar
+            current={association.currentAmount}
+            goal={association.goalAmount}
+          />
+      )}
     </Link>
   );
 };
+

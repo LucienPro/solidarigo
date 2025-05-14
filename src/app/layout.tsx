@@ -6,7 +6,8 @@ import { Geist } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import Navbar from "./_components/Navbar";
 import { SessionProvider } from "next-auth/react";
-import { CartProvider } from "@/context/CartContext"; // 👈 ajoute ça
+import { CartProvider } from "@/context/CartContext";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Solidarigo",
@@ -26,9 +27,10 @@ export default function RootLayout({
     <html lang="fr" className={`${geist.variable}`}>
       <body>
         <SessionProvider>
-          <CartProvider> {/* ✅ ENTOURE ici */}
+          <CartProvider>
             <Navbar />
             <TRPCReactProvider>{children}</TRPCReactProvider>
+            <Toaster position="bottom-right" />
           </CartProvider>
         </SessionProvider>
       </body>

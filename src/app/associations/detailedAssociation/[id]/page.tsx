@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { db } from "~/server/db";
 import Link from "next/link";
+import { Breadcrumb } from "@/app/_components/Breadcrumb";
+import { ProgressBar } from "@/app/_components/ProgressBar";
+import { ProductCardList } from "@/app/_components/ProductCardList";
 
 type Props = {
   params: {
@@ -9,9 +12,8 @@ type Props = {
   };
 };
 
-// ... (imports inchangés)
-
 export default async function DetailedAssociationPage({ params }: Props) {
+
   const association = await db.association.findUnique({
     where: { id: params.id },
     include: {
@@ -23,6 +25,13 @@ export default async function DetailedAssociationPage({ params }: Props) {
 
   return (
     <main className="px-6 py-12 text-black max-w-4xl mx-auto">
+      <Breadcrumb
+  items={[
+    { label: "Accueil", href: "/" },
+    { label: "Associations", href: "/associations" },
+    { label: association.name },
+  ]}
+/>
       <Link
         href="/associations"
         className="text-green-600 hover:underline mb-4 inline-block transition-transform hover:translate-x-1"
@@ -46,6 +55,14 @@ export default async function DetailedAssociationPage({ params }: Props) {
         <span className="inline-block bg-green-100 text-green-700 text-sm px-3 py-1 rounded-full mb-6">
           {association.category}
         </span>
+
+        <div className="mt-8">
+  <h2 className="text-2xl font-semibold mb-2">📊 Objectif de collecte</h2>
+  <p className="text-gray-600 mb-2">
+  Grâce à vos achats solidaires, {(association.currentAmount / 100).toFixed(2)} € ont déjà été collectés sur un objectif de {(association.goalAmount / 100).toFixed(2)} €.
+  </p>
+  <ProgressBar current={association.currentAmount} goal={association.goalAmount} />
+</div>
 
         {/* 🪴 Activités */}
         {association.activities && (
@@ -71,23 +88,14 @@ export default async function DetailedAssociationPage({ params }: Props) {
           </div>
         )}
 
-        {/* 🎁 Produits solidaires */}
+        {/* Produits solidaires */}
         <h2 className="text-2xl font-semibold mt-10 mb-4">🎁 Produits solidaires</h2>
         {association.products.length === 0 ? (
           <p className="text-gray-500">Aucun produit disponible.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {association.products.map((product) => (
-              <div key={product.id} className="border rounded-lg p-4 shadow-sm bg-gray-50">
-                <h3 className="font-semibold text-lg">{product.name}</h3>
-                <p className="text-sm text-gray-600 mb-2">{product.description}</p>
-                <p className="font-medium text-green-700">{(product.price / 100).toFixed(2)} €</p>
-              </div>
-            ))}
-          </div>
+          <ProductCardList products={association.products} />
         )}
       </div>
     </main>
   );
 }
-
