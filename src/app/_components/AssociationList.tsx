@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { api } from "~/trpc/react";
 import { EditAssociationModal } from "./EditAssociationModal";
+import type { Association } from "@prisma/client";
+
 
 // Type d'une association (à ajuster selon ton schema si différent)
-type Association = {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  logoUrl?: string | null;
-};
+// type Association = {
+//   id: string;
+//   name: string;
+//   description: string;
+//   category: string;
+//   logoUrl?: string | null;
+// };
 
 type Props = {
   isAdmin?: boolean;
@@ -35,11 +37,11 @@ export const AssociationList = ({ isAdmin = false }: Props) => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {associations.map((asso) => (
-          <div
-            key={asso.id}
-            className="bg-white border border-gray-200 rounded-lg shadow-md p-6 relative"
-          >
+        {associations.map((asso: Association) => (
+  <div
+    key={asso.id}
+    className="bg-white border border-gray-200 rounded-lg shadow-md p-6 relative"
+  >
             <h3 className="text-xl font-semibold text-black">{asso.name}</h3>
             <p className="text-gray-700 mt-2">{asso.description}</p>
             <p className="text-sm text-gray-500 mt-1 italic">{asso.category}</p>
