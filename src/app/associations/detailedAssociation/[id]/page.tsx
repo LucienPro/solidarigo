@@ -7,12 +7,13 @@ import { ProgressBar } from "@/app/_components/ProgressBar";
 import { ProductCardList } from "@/app/_components/ProductCardList";
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export default async function DetailedAssociationPage({ params }: Props) {
+export default async function DetailedAssociationPage(props: Props) {
+  const params = await props.params;
 
   const association = await db.association.findUnique({
     where: { id: params.id },
