@@ -16,22 +16,22 @@ export default function AdminPage() {
 
       <section className="mb-10">
         <h2 className="text-2xl font-semibold mb-4">Gestion des associations</h2>
-        <AddAssociationForm isAdmin />
+        <AddAssociationForm/>
       </section>
 
       <section className="mb-10">
         <h2 className="text-2xl font-semibold mb-4">📋 Liste des associations</h2>
-        <AssociationList isAdmin={true} />
+        <AssociationList/>
       </section>
 
       <section className="mb-10">
         <h2 className="text-2xl font-semibold mb-4">🛒 Gestion des produits</h2>
-        <AddProductForm isAdmin />
+        <AddProductForm/>
       </section>
 
       <section>
         <h2 className="text-2xl font-semibold mb-4">📦 Liste des produits</h2>
-        <ProductList isAdmin={true} />
+        <ProductList/>
       </section>
     </main>
   );
