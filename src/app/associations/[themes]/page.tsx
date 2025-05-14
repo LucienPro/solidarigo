@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { AssociationCard } from "~/app/_components/AssociationCard";
-import { db } from "~/server/db";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "~/server/api/root";
+import { db } from "~/server/db";
 
 type RouterOutputs = inferRouterOutputs<AppRouter>;
 type Association = RouterOutputs["association"]["getAll"][number];
@@ -16,12 +16,13 @@ const THEME_EMOJIS: Record<string, string> = {
   Inclusion: "🌍",
 };
 
-export default async function ThemePage({
+export default async function Page({
   params,
 }: {
-  params: { themes: string };
+  params: Promise<{ themes: string }>;
 }) {
-  const currentRaw = decodeURIComponent(params.themes);
+  const { themes } = await params;
+  const currentRaw = decodeURIComponent(themes);
 
   const currentCategory = Object.keys(THEME_EMOJIS).find(
     (key) => key.toLowerCase() === currentRaw.toLowerCase()
