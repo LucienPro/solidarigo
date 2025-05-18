@@ -10,7 +10,15 @@ type Association = {
   name: string;
   description: string;
   category: string;
-  logoUrl?: string | null;
+  logoUrl: string | null;
+  details: string | null;
+  activities: string | null;
+  supportReasons: string | null;
+  impact: string | null;
+  currentAmount: number;
+  goalAmount: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 
@@ -18,9 +26,9 @@ function AssociationListWithFilter() {
   const { data: associations = [], isLoading } = api.association.getAll.useQuery();
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
 
-  const filtered = selectedTheme
-    ? associations.filter((a: Association) => a.category === selectedTheme)
-    : associations;
+const filtered: Association[] = selectedTheme
+  ? associations.filter((a: Association) => a.category === selectedTheme)
+  : associations;
 
   return (
     <>
