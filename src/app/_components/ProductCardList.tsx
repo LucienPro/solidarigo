@@ -2,7 +2,6 @@
 
 import { ProductCard } from "./ProductCard";
 
-// Type minimal pour les produits depuis Prisma
 type Props = {
   products: {
     id: string;
