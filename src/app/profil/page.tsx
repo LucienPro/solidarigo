@@ -5,6 +5,7 @@ import { api } from "@/utils/api";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image"; // ✅ Import du composant Image
 
+
 export default function ProfilPage() {
   const { data: session, isPending } = authClient.useSession();
   const { data: orders = [], isLoading } = api.order.getAllByUser.useQuery();
@@ -103,14 +104,15 @@ export default function ProfilPage() {
                 </p>
                 {order.items.length > 0 && (
                   <ul className="mt-2 list-disc list-inside text-gray-600">
-                    {order.items.map((item) => (
-                      <li key={item.id}>
-                        {item.name} × {item.quantity}{" "}
-                        <span className="text-gray-400">
-                          ({(item.unitPrice / 100).toFixed(2)} €)
-                        </span>
-                      </li>
-                    ))}
+                    {order.items.map((item: { id: string; name: string; quantity: number; unitPrice: number }) => (
+  <li key={item.id}>
+    {item.name} × {item.quantity}{" "}
+    <span className="text-gray-400">
+      ({(item.unitPrice / 100).toFixed(2)} €)
+    </span>
+  </li>
+))}
+
                   </ul>
                 )}
               </li>
