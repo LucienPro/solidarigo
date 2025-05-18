@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import { api } from "~/trpc/react";
+import type { Testimonial } from "@prisma/client";
 
 export const TestimonialCarousel = () => {
   const { data: testimonials = [], isLoading } = api.testimonial.getAll.useQuery();
@@ -20,7 +21,7 @@ export const TestimonialCarousel = () => {
         loop
         spaceBetween={30}
       >
-        {testimonials.map((t) => (
+        {testimonials.map((t: Testimonial) => (
           <SwiperSlide key={t.id}>
             <div className="bg-white p-6 rounded-lg shadow text-center">
               <p className="text-gray-700 text-lg italic">“{t.message}”</p>
