@@ -5,7 +5,13 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import { api } from "~/trpc/react";
-import type { Testimonial } from "@prisma/client";
+
+type Testimonial = {
+  id: string;
+  author: string;
+  message: string;
+  createdAt: Date;
+};
 
 export const TestimonialCarousel = () => {
   const { data: testimonials = [], isLoading } = api.testimonial.getAll.useQuery();
