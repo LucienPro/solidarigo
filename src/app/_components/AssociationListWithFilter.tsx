@@ -4,16 +4,23 @@ import { useState } from "react";
 import { api } from "~/trpc/react";
 import { AssociationCard } from "./AssociationCard";
 import { ThemeFilterMenu } from "./ThemeFilterMenu";
-import type { Association } from "@prisma/client";
+
+type Association = {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  logoUrl?: string | null;
+};
 
 
 function AssociationListWithFilter() {
   const { data: associations = [], isLoading } = api.association.getAll.useQuery();
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
 
-const filtered = selectedTheme
-  ? associations.filter((a: Association) => a.category === selectedTheme)
-  : associations;
+  const filtered = selectedTheme
+    ? associations.filter((a: Association) => a.category === selectedTheme)
+    : associations;
 
   return (
     <>
