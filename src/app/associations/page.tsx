@@ -10,7 +10,8 @@ export default function AllAssociationsPage() {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
 
   const filtered = selectedTheme
-    ? associations.filter((a) => a.category === selectedTheme)
+      ? associations.filter((a: { category: string }) => a.category === selectedTheme)
+
     : associations;
 
   return (
