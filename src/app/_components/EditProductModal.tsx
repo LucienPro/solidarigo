@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { api } from "~/trpc/react";
 
+type Association = {
+  id: string;
+  name: string;
+};
+
 type EditProductModalProps = {
   product: {
     id: string;
@@ -87,7 +92,7 @@ export const EditProductModal = ({
           required
         >
           <option value="">-- Choisir une association --</option>
-          {associations?.map((a) => (
+          {associations?.map((a: Association) => (
             <option key={a.id} value={a.id}>
               {a.name}
             </option>
