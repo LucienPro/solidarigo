@@ -28,10 +28,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   // Load cart from localStorage on mount
-  useEffect(() => {
+useEffect(() => {
+  try {
     const stored = localStorage.getItem("cart");
-    if (stored) setCart(JSON.parse(stored));
-  }, []);
+    if (stored) setCart(JSON.parse(stored) as CartItem[]);
+  } catch (error) {
+    console.error("Erreur lors du chargement du panier :", error);
+  }
+}, []);
 
   // Save cart to localStorage on change
   useEffect(() => {
