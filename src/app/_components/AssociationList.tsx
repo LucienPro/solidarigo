@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { api } from "~/trpc/react";
 import { EditAssociationModal } from "./EditAssociationModal";
-import type { Association } from "@prisma/client";
+import { type Association } from "@prisma/client";
 
 
 // Type d'une association (à ajuster selon ton schema si différent)
