@@ -3,7 +3,22 @@
 import { useState } from "react";
 import { api } from "~/trpc/react";
 import { EditAssociationModal } from "./EditAssociationModal";
-import { type Association } from "@prisma/client";
+
+type Association = {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  logoUrl?: string | null;
+  details?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  activities?: string | null;
+  supportReasons?: string | null;
+  impact?: string | null;
+  currentAmount: number;
+  goalAmount: number;
+};
 
 type Props = {
   isAdmin?: boolean;
