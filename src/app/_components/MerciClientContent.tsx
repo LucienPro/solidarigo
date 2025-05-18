@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
+import { ConfettiTrigger } from "@/app/_components/ConfettiTrigger";
+
 
 type SessionInfo = {
   email?: string;
@@ -46,6 +48,8 @@ export default function MerciClientContent() {
   }
 
   return (
+      <>
+      <ConfettiTrigger />
     <div className="max-w-xl mx-auto text-center py-16 px-6 text-black">
       <h1 className="text-3xl font-bold mb-4">🎉 Merci pour votre soutien !</h1>
       <p className="mb-4">
@@ -73,5 +77,6 @@ export default function MerciClientContent() {
         Retour à l’accueil
       </Link>
     </div>
+    </>
   );
 }
