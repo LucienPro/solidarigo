@@ -5,16 +5,6 @@ import { api } from "~/trpc/react";
 import { EditAssociationModal } from "./EditAssociationModal";
 import { type Association } from "@prisma/client";
 
-
-// Type d'une association (à ajuster selon ton schema si différent)
-// type Association = {
-//   id: string;
-//   name: string;
-//   description: string;
-//   category: string;
-//   logoUrl?: string | null;
-// };
-
 type Props = {
   isAdmin?: boolean;
 };
