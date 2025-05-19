@@ -1,0 +1,151 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy   User   @relation("UserPosts", fields: [createdById], references: [id])
+  createdById String
+
+  @@index([name])
+}
+
+model Product {
+  id              String      @id @default(uuid())
+  name            String      @unique
+  description     String
+  price           Int
+  imageUrl        String?
+  associationId   String
+  association     Association @relation(fields: [associationId], references: [id])
+  createdAt       DateTime    @default(now())
+  stripeProductId String? @unique
+  stripePriceId   String?
+}
+
+model Association {
+  id             String   @id @default(uuid())
+  name           String   @unique
+  description    String
+  category       String
+  logoUrl        String?
+  details        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  activities     String?
+  supportReasons String?
+  impact         String?
+  currentAmount Int     @default(0)
+  goalAmount    Int     @default(1000)
+
+  products Product[]
+}
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  author    String   @unique
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model User {
+  id            String    @id
+  email         String    @unique
+  name          String
+  firstName     String?
+  lastName      String?
+  emailVerified Boolean
+  image         String?
+  posts         Post[]    @relation("UserPosts")
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+  orders        Order[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Order {
+  id               String      @id @default(uuid())
+  userId           String
+  user             User        @relation(fields: [userId], references: [id])
+  totalAmount      Int
+  status           String      @default("paid")
+  stripeCheckoutId String
+  createdAt        DateTime    @default(now())
+  items            OrderItem[]
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId   String
+  order     Order  @relation(fields: [orderId], references: [id])
+  priceId   String // Stripe priceId
+  name      String
+  quantity  Int
+  unitPrice Int
+}

@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background: linear-gradient(270deg, #a7f3d0, #bfdbfe); /* vert clair -> bleu clair */
+  background-size: 400% 400%;
+  background-repeat: no-repeat;
+  animation: gradient-x 12s ease infinite;
+}
+
+
+:root {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html {
+  scroll-behavior: smooth;
+}

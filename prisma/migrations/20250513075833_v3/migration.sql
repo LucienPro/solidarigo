@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Association" ADD COLUMN     "currentAmount" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "goalAmount" INTEGER NOT NULL DEFAULT 1000;
