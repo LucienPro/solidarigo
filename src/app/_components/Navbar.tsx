@@ -87,11 +87,13 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/#temoignages"
-            className="text-sm font-medium text-gray-600 hover:underline"
-          >
-            Témoignages
-          </Link>
+  href="/temoignages"
+  className={`text-sm font-medium transition-colors ${
+    pathname === "/temoignages" ? "text-green-700" : "text-gray-600"
+  } hover:underline`}
+>
+  Témoignages
+</Link>
 
           {/* Zone utilisateur + Panier */}
           <div className="ml-auto flex items-center gap-6 relative">
@@ -193,9 +195,14 @@ export default function Navbar() {
           <Link href="/boutique" className="block py-2 text-gray-700">
             Boutique
           </Link>
-          <Link href="/#temoignages" className="block py-2 text-gray-700">
-            Témoignages
-          </Link>
+          <Link
+  href="/temoignages"
+  className={`text-sm font-medium transition-colors ${
+    pathname === "/temoignages" ? "text-green-700" : "text-gray-600"
+  } hover:underline`}
+>
+  Témoignages
+</Link>
           {!session && (
             <div className="pt-2 flex flex-col gap-2">
               <Link href="/login" className="text-sm border px-3 py-1 rounded text-center">

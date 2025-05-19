@@ -81,4 +81,92 @@ export const associationRouter = createTRPCRouter({
     });
   }),
 
+  getByIdWithStats: publicProcedure
+  .input(z.string().uuid())
+  .query(async ({ input }) => {
+    const association = await db.association.findUnique({
+      where: { id: input },
+      include: {
+        products: true,
+      },
+    });
+
+    if (!association) throw new Error("Association introuvable");
+
+    const priceIds = association.products
+      .map((p) => p.stripePriceId)
+      .filter((id): id is string => !!id);
+
+    const orderItems = await db.orderItem.findMany({
+      where: {
+        priceId: {
+          in: priceIds,
+        },
+      },
+    });
+
+    const totalCagnotte = orderItems.reduce((sum, item) => {
+      return sum + item.unitPrice * item.quantity;
+    }, 0);
+
+    const currentAmount = Math.floor(totalCagnotte * 0.33); // 💚 33 % reversés
+
+    return {
+      ...association,
+      currentAmount,
+    };
+  }),
+  getAllWithStats: publicProcedure.query(async () => {
+  const associations = await db.association.findMany({
+    include: {
+      products: true,
+    },
+  });
+
+  const allPriceIds = associations.flatMap((asso) =>
+    asso.products.map((p) => p.stripePriceId).filter((id): id is string => !!id)
+  );
+
+  const allOrderItems = await db.orderItem.findMany({
+    where: {
+      priceId: {
+        in: allPriceIds,
+      },
+    },
+  });
+
+  const priceIdToItemsMap = new Map<string, typeof allOrderItems>();
+
+  for (const item of allOrderItems) {
+    const items = priceIdToItemsMap.get(item.priceId) ?? [];
+    priceIdToItemsMap.set(item.priceId, [...items, item]);
+  }
+
+  // 💚 Calcul du currentAmount pour chaque asso
+  const associationsWithStats = associations.map((asso) => {
+    const totalRevenue = asso.products.reduce((sum, product) => {
+      const items = product.stripePriceId
+        ? priceIdToItemsMap.get(product.stripePriceId) ?? []
+        : [];
+
+      const revenueForProduct = items.reduce((acc, item) => {
+        return acc + item.unitPrice * item.quantity;
+      }, 0);
+
+      return sum + revenueForProduct;
+    }, 0);
+
+    const currentAmount = Math.floor(totalRevenue * 0.33);
+
+    return {
+      ...asso,
+      currentAmount,
+    };
+  });
+
+  return associationsWithStats;
+}),
+
 });
+
+

@@ -4,6 +4,7 @@ import { api } from "@/utils/api";
 import { useCart } from "@/context/CartContext";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import Image from "next/image";
 
 type ProductType = {
   id: string;

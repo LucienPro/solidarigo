@@ -3,40 +3,42 @@
 import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
     try {
       const res = await authClient.signUp.email({
         email,
         password,
-        name: `${firstName} ${lastName}`
-
+        name: `${firstName} ${lastName}`,
       });
-    
+
       if (res.error) {
         console.error("Erreur signup:", res.error.message);
         throw new Error(res.error.message);
       }
-    
-      alert("📬 Un email de vérification t’a été envoyé.");
+
+      toast.success("📬 Un email de vérification t’a été envoyé !");
       router.push('/login');
-    } catch (err: any) {
-      console.error("Erreur côté client :", err);
-      setError(err.message || 'Erreur inconnue');
-    }
-    
-  };
+    } catch (err) {
+  if (err instanceof Error) {
+    console.error("Erreur côté client :", err);
+    setError(err.message ?? "Erreur inconnue");
+  } else {
+    setError("Une erreur inattendue est survenue.");
+  }
+    }};
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
@@ -53,22 +55,21 @@ export default function RegisterPage() {
             required
           />
           <input
-  type="text"
-  placeholder="Prénom"
-  className="p-3 rounded-xl border"
-  value={firstName}
-  onChange={(e) => setFirstName(e.target.value)}
-  required
-/>
-<input
-  type="text"
-  placeholder="Nom"
-  className="p-3 rounded-xl border"
-  value={lastName}
-  onChange={(e) => setLastName(e.target.value)}
-  required
-/>
-
+            type="text"
+            placeholder="Prénom"
+            className="p-3 rounded-xl border"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Nom"
+            className="p-3 rounded-xl border"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
           <input
             type="password"
             placeholder="Mot de passe"

@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { HydrateClient } from "~/trpc/server";
 import { HeroSection } from "./_components/HeroSection";
 import { AssociationOfTheDay } from "./_components/AssociationOfTheDay";
@@ -88,17 +87,6 @@ export default function HomePage() {
           >
             <h2 id="temoignages-title" className="text-3xl font-bold mb-8">💬 Témoignages & Impact</h2>
             <TestimonialCarouselWrapper />
-          </section>
-
-          {/* Événements solidaires */}
-          <section
-            id="evenements"
-            aria-labelledby="evenements-title"
-            role="region"
-            className="bg-gray-50 py-12 px-6 text-center"
-          >
-            <h2 id="evenements-title" className="text-3xl font-bold mb-4">📣 Événements solidaires</h2>
-            <p className="text-gray-500">✨ Bientôt disponible !</p>
           </section>
 
           {/* Newsletter */}

@@ -8,7 +8,7 @@ import { ProgressBar } from "./ProgressBar";
 
 
 export const AssociationOfTheDay = () => {
-  const { data: associations = [], isLoading } = api.association.getAll.useQuery();
+  const { data: associations = [], isLoading } = api.association.getAllWithStats.useQuery();
   const [selectedAsso, setSelectedAsso] = useState<typeof associations[number] | null>(null);
 
   useEffect(() => {

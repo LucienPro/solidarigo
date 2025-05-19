@@ -4,9 +4,14 @@ import { useState } from "react";
 import { api } from "~/trpc/react";
 import { AssociationCard } from "../_components/AssociationCard";
 import { ThemeFilterMenu } from "../_components/ThemeFilterMenu";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "~/server/api/root";
+
+type RouterOutputs = inferRouterOutputs<AppRouter>;
+type Association = RouterOutputs["association"]["getAllWithStats"][number];
 
 export default function AllAssociationsPage() {
-  const { data: associations = [], isLoading } = api.association.getAll.useQuery();
+  const { data: associations = [], isLoading } = api.association.getAllWithStats.useQuery();
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
 
   const filtered = selectedTheme
@@ -27,7 +32,7 @@ export default function AllAssociationsPage() {
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((asso) => (
+          {filtered.map((asso: Association) => (
             <AssociationCard key={asso.id} association={asso} />
           ))}
         </div>
