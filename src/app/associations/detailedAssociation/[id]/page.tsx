@@ -40,14 +40,17 @@ export default function DetailedAssociationPage() {
 
       <div className="bg-white shadow-md rounded-lg p-6">
         {association.logoUrl && (
-          <Image
-            src={association.logoUrl}
-            alt={association.name}
-            width={800}
-            height={300}
-            className="rounded-lg object-cover w-full h-64 mb-6"
-          />
-        )}
+  <div className="relative w-full h-64 mb-6 overflow-hidden rounded-lg border border-gray-200">
+    <Image
+      src={association.logoUrl}
+      alt={association.name}
+      fill
+      className="object-contain p-4"
+      sizes="(max-width: 768px) 100vw, 800px"
+    />
+  </div>
+)}
+
 
         <h1 className="text-3xl font-bold mb-4">{association.name}</h1>
         <p className="text-gray-700 mb-6">{association.description}</p>
