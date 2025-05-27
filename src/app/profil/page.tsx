@@ -33,7 +33,7 @@ export default function ProfilPage() {
 
   const { name, email, image } = session.user;
 
-  // 🔁 Tri des commandes par date décroissante
+  // Tri des commandes par date décroissante
   const sortedOrders = [...orders].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
@@ -42,7 +42,7 @@ export default function ProfilPage() {
     <div className="max-w-3xl mx-auto px-6 py-12 text-black space-y-10">
       <h1 className="text-3xl font-bold text-center">👤 Mon profil</h1>
 
-      {/* 🧾 Infos utilisateur */}
+      {/* Infos utilisateur */}
       <div className="bg-white shadow rounded-lg p-6 flex items-center gap-6">
         {image && (
           <Image
@@ -61,7 +61,7 @@ export default function ProfilPage() {
         </div>
       </div>
 
-      {/* ✏️ Mise à jour du nom */}
+      {/* Mise à jour du nom */}
       <div>
         <h2 className="text-xl font-semibold mb-4">✏️ Modifier mon nom</h2>
         <form
@@ -86,7 +86,7 @@ export default function ProfilPage() {
         </form>
       </div>
 
-      {/* 🧾 Historique des commandes */}
+      {/* Historique des commandes */}
       <div>
         <h2 className="text-xl font-semibold mb-4">🧾 Mes commandes</h2>
         {isLoading ? (

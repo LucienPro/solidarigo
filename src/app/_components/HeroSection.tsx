@@ -31,7 +31,7 @@ export const HeroSection = () => {
             href="#boutique"
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md shadow transition"
           >
-            Faire un don
+            Faire un achat solidaire
           </Link>
         </div>
       </div>

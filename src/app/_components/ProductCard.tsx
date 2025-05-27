@@ -13,7 +13,7 @@ type Props = {
   priceId?: string;
 };
 
-export const ProductCard = ({ id, name, description, price, image, priceId }: Props) => {
+export const ProductCard = ({ name, description, price, image, priceId }: Props) => {
   const { addToCart } = useCart();
   const [shaking, setShaking] = useState(false);
 

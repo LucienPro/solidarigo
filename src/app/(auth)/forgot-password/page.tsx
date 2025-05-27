@@ -8,7 +8,7 @@ export default function ForgotPasswordPage() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('idle');
     setError(null);
@@ -16,13 +16,15 @@ export default function ForgotPasswordPage() {
     try {
       await authClient.forgetPassword({
         email,
-        redirectTo: 'http://localhost:3000/reset-password', // ou ton URL en prod
+        redirectTo: 'http://localhost:3000/reset-password',
       });
 
       setStatus('success');
-    } catch (err: any) {
-      console.error('Erreur envoi lien reset :', err);
-      setError(err?.message || 'Erreur inconnue.');
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Erreur inconnue';
+      console.error('Erreur envoi lien reset :', errorMessage);
+      setError(errorMessage);
       setStatus('error');
     }
   };
@@ -30,7 +32,9 @@ export default function ForgotPasswordPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
       <div className="w-full max-w-md bg-gray-100 p-6 rounded-2xl shadow-lg">
-        <h1 className="text-xl font-semibold text-center mb-4">Mot de passe oublié</h1>
+        <h1 className="text-xl font-semibold text-center mb-4">
+          Mot de passe oublié
+        </h1>
 
         {status === 'success' ? (
           <p className="text-green-700 text-center">

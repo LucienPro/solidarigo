@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 
 export const Footer = () => {
   return (
@@ -21,7 +21,7 @@ export const Footer = () => {
           <ul className="space-y-2 text-gray-300">
             <li><Link href="#themes" className="hover:underline">Thématiques</Link></li>
             <li><Link href="#boutique" className="hover:underline">Boutique solidaire</Link></li>
-            <li><Link href="#how-it-works" className="hover:underline">Comment ça marche</Link></li>
+            <li><Link href="#after-hero" className="hover:underline">Comment ça marche</Link></li>
             <li><Link href="#newsletter" className="hover:underline">Newsletter</Link></li>
           </ul>
         </div>
@@ -30,14 +30,8 @@ export const Footer = () => {
         <div>
           <h4 className="text-lg font-semibold mb-2">Suivez-nous</h4>
           <div className="flex gap-4 text-2xl text-gray-300">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <a href="https://instagram.com/solidarigo" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               <FaInstagram className="hover:text-pink-500 transition" />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-              <FaTwitter className="hover:text-blue-400 transition" />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <FaLinkedin className="hover:text-blue-500 transition" />
             </a>
           </div>
         </div>

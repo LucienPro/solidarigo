@@ -1,21 +1,26 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useCart } from "@/context/CartContext";
-import confetti from "canvas-confetti";
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import confetti from 'canvas-confetti';
+import Link from 'next/link';
+
+type StripeSessionData = {
+  email?: string;
+  amount_total?: number;
+  customer_name?: string;
+};
 
 export default function MerciPage() {
   const { clearCart } = useCart();
   const searchParams = useSearchParams();
-  const sessionId = searchParams.get("session_id");
+  const sessionId = searchParams.get('session_id');
 
   const [loading, setLoading] = useState(true);
-  const [sessionData, setSessionData] = useState<{
-    email?: string;
-    amount_total?: number;
-    customer_name?: string;
-  } | null>(null);
+  const [sessionData, setSessionData] = useState<StripeSessionData | null>(null);
+
+  const hasCelebrated = useRef(false);
 
   useEffect(() => {
     if (!sessionId) {
@@ -26,29 +31,29 @@ export default function MerciPage() {
     const fetchSession = async () => {
       try {
         const res = await fetch(`/api/stripe/session/${sessionId}`);
-        const data = await res.json();
+        const data = (await res.json()) as StripeSessionData;
         setSessionData(data);
 
-        // ✅ Lancer les confettis une seule fois
-        confetti({
-          particleCount: 150,
-          spread: 70,
-          origin: { y: 0.6 },
-        });
+        if (!hasCelebrated.current) {
+          hasCelebrated.current = true;
 
-        // ✅ Vider le panier une seule fois
-        if (typeof window !== "undefined") {
+          (confetti as (opts: Record<string, unknown>) => void)({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+          });
+
           clearCart();
         }
       } catch (err) {
-        console.error("Erreur de récupération de la session :", err);
+        console.error('Erreur de récupération de la session :', err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchSession();
-  }, [sessionId]); // ❌ clearCart retiré ici
+    void fetchSession();
+  }, [sessionId, clearCart]);
 
   if (loading) {
     return <p className="text-center py-12 text-black">Chargement...</p>;
@@ -60,7 +65,7 @@ export default function MerciPage() {
       <p className="mb-4">
         {sessionData?.customer_name
           ? `Merci ${sessionData.customer_name}, votre paiement a bien été reçu.`
-          : "Votre paiement a bien été reçu."}
+          : 'Votre paiement a bien été reçu.'}
       </p>
 
       {sessionData?.amount_total && (
@@ -70,15 +75,17 @@ export default function MerciPage() {
       )}
 
       {sessionData?.email && (
-        <p className="text-gray-600 text-sm">Un reçu a été envoyé à {sessionData.email}</p>
+        <p className="text-gray-600 text-sm">
+          Un reçu a été envoyé à {sessionData.email}
+        </p>
       )}
 
-      <a
+      <Link
         href="/"
         className="mt-6 inline-block px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
       >
         Retour à l’accueil
-      </a>
+      </Link>
     </div>
   );
 }

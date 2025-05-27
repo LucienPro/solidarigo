@@ -14,7 +14,7 @@ const THEME_EMOJIS: Record<string, string> = {
   Inclusion: "🌍",
 };
 
-// 💡 Fonction pour ignorer les accents et la casse
+// Fonction pour ignorer les accents et la casse
 const normalize = (str: string) =>
   str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 

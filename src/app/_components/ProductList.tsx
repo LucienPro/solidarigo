@@ -5,46 +5,46 @@ import { useCart } from "@/context/CartContext";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import Image from "next/image";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "@/server/api/root";
 
-type ProductType = {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string | null;
-  priceId: string;
+type Props = {
+  limit?: number;
 };
 
-function getRandomSubset<T>(array: T[], count: number): T[] {
-  const shuffled = [...array].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
-}
+type RouterOutputs = inferRouterOutputs<AppRouter>;
+type ProductType = NonNullable<RouterOutputs["stripe"]["getProducts"][number]>;
 
-export const ProductList = ({ limit }: { limit?: number }) => {
+export const ProductList = ({ limit }: Props) => {
   const { data: products, isLoading } = api.stripe.getProducts.useQuery();
   const { addToCart } = useCart();
   const [shakingProductId, setShakingProductId] = useState<string | null>(null);
 
   if (isLoading) return <p className="text-black">Chargement des produits...</p>;
 
-  const validProducts = (products ?? []).filter(Boolean) as ProductType[];
-  const productsToDisplay = limit
-    ? getRandomSubset(validProducts, limit)
-    : validProducts;
+  const validProducts = (products ?? []).filter(
+    (p): p is ProductType => p !== null
+  );
+
+  const displayedProducts = limit ? validProducts.slice(0, limit) : validProducts;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
-      {productsToDisplay.map((product) => (
+      {displayedProducts.map((product) => (
         <div
           key={product.id}
           className="bg-white border border-gray-200 rounded-lg shadow-md p-4 flex flex-col"
         >
           {product.image && (
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-48 object-contain rounded-md mb-4"
-            />
+            <div className="relative w-full h-48 mb-4">
+              <Image
+                src={product.image}
+                alt={product.name}
+                fill
+                className="object-contain rounded-md"
+                sizes="(max-width: 768px) 100vw, 400px"
+              />
+            </div>
           )}
 
           <h3 className="text-lg font-semibold text-black">{product.name}</h3>

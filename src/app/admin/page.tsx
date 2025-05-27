@@ -31,7 +31,7 @@ export default function AdminPage() {
 
       <section>
         <h2 className="text-2xl font-semibold mb-4">📦 Liste des produits</h2>
-        <ProductList isAdmin={true} />
+        <ProductList/>
       </section>
     </main>
   );
