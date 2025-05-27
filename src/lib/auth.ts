@@ -10,22 +10,37 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   emailAndPassword: {
-    enabled: true,
-    autoSignIn: true,
-    requireEmailVerification: true,
-    sendResetPassword: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: "🔐 Réinitialisation de votre mot de passe",
-        html: `
+  enabled: true,
+  autoSignIn: true,
+  requireEmailVerification: true,
+  sendResetPassword: async ({ user, url }) => {
+    await sendEmail({
+      to: user.email,
+      subject: "🔐 Réinitialisation de ton mot de passe - SolidariGo",
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto;">
+          <h2 style="color: #2F855A;">🌱 SolidariGo</h2>
           <p>Bonjour ${user.email},</p>
-          <p>Voici le lien pour réinitialiser ton mot de passe :</p>
-          <p><a href="${url}">Réinitialiser mon mot de passe</a></p>
-        `,
-      });
-    }
-    
-  },
+          <p>Tu as demandé à réinitialiser ton mot de passe. Pas de panique, on est là pour toi 💪</p>
+          <p>Clique sur le bouton ci-dessous pour choisir un nouveau mot de passe en toute sécurité :</p>
+          <p style="text-align: center; margin: 30px 0;">
+            <a href="${url}" style="background-color: #2F855A; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+              Réinitialiser mon mot de passe
+            </a>
+          </p>
+          <p>Ce lien est temporaire et expirera bientôt pour ta sécurité.</p>
+          <p>Si tu n'es pas à l’origine de cette demande, tu peux ignorer cet e-mail.</p>
+          <hr style="margin: 40px 0;" />
+          <p style="font-size: 0.9em; color: #666;">
+            Merci de faire partie de la communauté SolidariGo 💚
+            <br/>Ensemble, soutenons les projets qui comptent.
+          </p>
+        </div>
+      `,
+    });
+  }
+}
+,
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
       const redirectUrl = `${url}&redirect=${encodeURIComponent("http://localhost:3000/auth/verify-success")}`;
