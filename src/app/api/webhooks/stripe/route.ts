@@ -40,13 +40,13 @@ if (!sig) {
     }
 
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
-  expand: ['data.price'], // ✅ pour accéder à price.id
+  expand: ['data.price'],
 });
 
 await db.order.create({
   data: {
     userId,
-    stripeCheckoutId: session.id, // ✅ ajout obligatoire
+    stripeCheckoutId: session.id,
     totalAmount: session.amount_total ?? 0,
     items: {
       create: lineItems.data.map((item) => ({
